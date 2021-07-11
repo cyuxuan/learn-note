@@ -295,5 +295,190 @@ mybatis:
 linux 安装mysql
 - [linux安装Mysql参考](https://blog.csdn.net/qq_41510551/article/details/110731610)
 - [ARM64架构下面安装mysql](https://blog.csdn.net/littleluoli/article/details/104796805/)
-- [linux安装mysql参考](https://blog.csdn.net/sinat_15946141/article/details/105314944)
+- [linux安装mysql参考](https://blog.csdn.net/sinat_15946141/article/details/105314944)->该博客在修改远程连接时要选择mysql数据库 use mysql
+- 本机  root密码：2tj&Pax9XkQg(随机生成)
+
+###### cloud-consumer-order-80
+1. RestTemplate提供了多种便捷访问远程Http服务的方法。是一种简单便捷的restful服务模板类，是spring提供的用于访问Rest服务的客户端模板工具类。
+
+
+
+### Eureka
+#### Eureka基础知识
+1. 什么是服务治理
+    - Spring Cloud 封装了 Netflix 公司开发的 Eureka 模块来实现服务治理在传统的rpc远程调用框架中，管理每个服务与服务之间依赖关系比较复杂，管理比较复杂，所以需要使用服务治理，管理服务于服务之间依赖关系，可以实现服务调用、负载均衡、容错等，实现服务发现与注册。
+2. 什么是服务注册
+    - Eureka采用了CS的设计架构，Eureka Server 作为服务注册功能的服务器，它是服务注册中心。而系统中的其他微服务，使用 Eureka的客户端连接到Eureka Server并维持心跳连接。这样系统的维护人员就可以通过 Eureka Server 来监控系统中各个微服务是否正常运行。在服务注册与发现中，有一个注册中心。当服务器启动的时候，会把当前自己服务器的信息 比如 服务地址通讯地址等以别名方式注册到注册中心上。另一方（消费者|服务提供者），以该别名的方式去注册中心上获取到实际的服务通讯地址，然后再实现本地RPC调用RPC远程调用框架核心设计思想：在于注册中心，因为使用注册中心管理每个服务与服务之间的一个依赖关系(服务治理概念)。在任何rpc远程框架中，都会有一个注册中心(存放服务地址相关信息(接口地址))
+    - 下左图是Eureka系统架构，右图是Dubbo的架构，请对比  
+    - ![Image text](images/image-4.png)
+3. Eureka两个组件
+    - Eureka包含两个组件：Eureka Server和Eureka Client
+    - Eureka Server提供服务注册服务
+    - 各个微服务节点通过配置启动后，会在EurekaServer中进行注册，这样EurekaServer中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观看到。
+    - EurekaClient通过注册中心进行访问
+    - 是一个Java客户端，用于简化Eureka Server的交互，客户端同时也具备一个内置的、使用轮询(round-robin)负载算法的负载均衡器。在应用启动后，将会向Eureka Server发送心跳(默认周期为30秒)。如果Eureka Server在多个心跳周期内没有接收到某个节点的心跳，EurekaServer将会从服务注册表中把这个服务节点移除（默认90秒）
+#### 单机
+1. 说明
+    ```
+    <!-- 以前的老版本（当前使用2018） -->
+    <dependency> 
+        <groupId>
+            org.springframework.cloud
+        </groupId> 
+        <artifactId>
+            spring-cloud-starter-eureka
+        </artifactId> 
+    </dependency>
+
+    <!-- 现在新版本（当前使用2020.2） -->
+    <dependency> 
+        <groupId>
+            org.springframework.cloud
+        </groupId> 
+        <artifactId>
+            spring-cloud-starter-netflix-eureka-server
+        </artifactId> 
+    </dependency>
+    ```
+
+2. 服务注册中心启动类中写 @EnableEurekaServer
+    ```
+    <!--eureka-server-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+    </dependency>
+    ```
+    ```
+    # yml文件中，注意缩进
+    eureka:
+        instance:
+            hostname: eureka7001.com #eureka服务端的实例名称
+        client:
+            register-with-eureka: false     #false表示不向注册中心注册自己。
+            fetch-registry: false     #false表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务
+            service-url:
+            #集群指向其它eureka
+            #defaultZone: http://eureka7002.com:7002/eureka/
+            #单机就是7001自己
+            defaultZone: http://eureka7001.com:7001/eureka/
+        #server:
+            #关闭自我保护机制，保证不可用服务被及时踢除
+            #enable-self-preservation: false
+            #eviction-interval-timer-in-ms: 2000
+    ```
+3. 服务消费者/提供者启动类中写 @EnableEurekaClient
+    ```
+    <!-- pom文件引入 -->
+    <dependency> 
+        <groupId>
+            org.springframework.cloud
+        </groupId> 
+        <artifactId>
+            spring-cloud-starter-netflix-eureka-client
+        </artifactId> 
+    </dependency>
+    ```
+    ```
+    # yml中配置，注意缩进
+    eureka:
+        client:
+            #表示是否将自己注册进EurekaServer默认为true。
+            register-with-eureka: true
+            #是否从EurekaServer抓取已有的注册信息，默认为true。单节点无所谓，集群必须设置为true才能配合ribbon使用负载均衡
+            fetchRegistry: true
+            service-url:
+            #单机
+            defaultZone: http://localhost:7001/eureka
+            # 集群
+            # defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka  # 集群版
+    ```
+#### 集群
+1. ![Image text](images/image-5.png)
+2. 问题：微服务RPC远程服务调用最核心的是什么
+    - 高可用，试想你的注册中心只有一个only one， 它出故障了那就呵呵(￣▽￣)"了，会导致整个为服务环境不可用，所以
+    - 解决办法：搭建Eureka注册中心集群 ，实现负载均衡+故障容错
+
+### Zookeeper
+#### Zookeeper安装
+1. [参考](https://www.tpyyes.com/a/linux/886.html)
+2. 配置文件中
+```
+spring:
+  application:
+    name: cloud-consumer-order
+  cloud:
+    #注册到zookeeper地址
+    zookeeper:
+      connect-string: server3.clocal.cn:2181
+```
+```
+        <!-- SpringBoot整合zookeeper客户端 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zookeeper-discovery</artifactId>
+        </dependency>
+        <!--添加zookeeper3.7.0版本-->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+```
+
+
+### Consul
+#### 简介
+1. [简介](https://www.consul.io/)
+2. 能干什么
+    - 服务发现 提供HTTP和DNS两种发现方式。
+    - 健康监测 支持多种方式，HTTP、TCP、Docker、Shell脚本定制化监控
+    - KV存储 Key、Value的存储方式
+    - 多数据中心 Consul支持多数据中心
+    - 可视化Web界面
+#### 安装
+1. [安装](https://www.cnblogs.com/fanshuyao/p/14486436.html)
+
+
+
+### 三个注册中心的异同
+
+
+### Ribbon
+####  简介
+- Spring Cloud Ribbon 是基于Netflix Ribbon实现的一套客户端 负载均衡工具
+- 简单的说，Ribbon是Netflix发布的开源项目，主要功能是提供客户端的软件负载均衡算法和服务调用。
+- Ribbon客户端组件提供一系列完善的配置项，如 连接超时，重试等。就是在配置文件中列出Load Balancer(简称LB)后面所有的机器，Ribbon会自动的帮助你基于某种规则(如简单轮询，随机连接等)去连接这些机器。我们很容易使用Ribbon实现自定义的负载均衡算法。
+
+### OpenFeign
+#### 简介
+- Feign是一个声明式WebService客户端。使用Feign能让编写Web Service客户端更加简单。
+- 它的用法是定义一个服务接口然后在上面添加注解。Feign也支持可拔插式的编码器和解码器。Spring Cloud对Feign进行了封装，使其支持了Spring MVC标准注解和HttpMEssageConverters。Fegin可以与Eureka和Ribbon组合使用以支持负载均衡。
+
+### Hystrix
+#### 概述
+1. 分布式面临的问题
+2. Hystrix 是什么
+3. Hystrix 能干什么
+4. Hystrix 官网资料
+
+#### Hystrix重要概念
+1. 服务降级
+    - 兜底的解决方案
+2. 服务熔断
+    - 达到最大访问量，直接调用服务降级
+    - 服务的降级->进而熔断->恢复调用链路
+3. 服务限流
+    - 秒杀高并发等操作，严禁一窝蜂的过来拥挤，大家排队，一秒钟N个，有序进行
+#### Hystrix案例
+
+#### Hystrix工作流程
+
+#### 服务监控hystrixDashboard
+
+### Gateway网关
+#### 概述简介
+
+### Config分布式配置中心
+#### 简介
 
