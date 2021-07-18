@@ -11,17 +11,17 @@ spring:
           uri: https://gitee.com/cyuxuan/learn.git #Gitee上面的git仓库名字
           ####搜索目录
           search-paths:
-            - configFile
-          username: 929809664@qq.com
-          password: aaaasd111123
+            - /springcloud-learn/springcloud-learn-1/Code/project/project-learn/configFile
+          username:
+          password:
           ####读取分支
           label: master
 #rabbitmq相关配置
-#rabbitmq:
-#  host: localhost
-#  port: 5672
-#  username: guest
-#  password: guest
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
 
 #服务注册到eureka地址
 eureka:
@@ -30,10 +30,10 @@ eureka:
       defaultZone: http://localhost:7001/eureka
 
 #rabbitmq相关配置,暴露bus刷新配置的端点
-#management:
-#  endpoints: #暴露bus刷新配置的端点
-#    web:
-#      exposure:
-#        include: 'bus-refresh'
+management:
+  endpoints: #暴露bus刷新配置的端点
+    web:
+      exposure:
+        include: 'bus-refresh'
 
 

@@ -481,4 +481,56 @@ spring:
 
 ### Config分布式配置中心
 #### 简介
+#### 
+1. 关于bootstrap.yml
+    - Spring Cloud会创建一个"Bootstrap Context", 最为Spring应用的"Application Context"的父上下文。初始化的时候，'Bootstrap Context'负责从[外部源]加载配置属性并解析配置。这两个上下文共享一个外部获取的'Environment'。
+    - ‘Bootstrap’属性有高优先级，默认情况下，它们不会被本地配置覆盖。‘Bootstrap Context’和‘Application Context’有着不同的约定，所以新增了一个‘bootstrap.yml’文件，保证‘Bootstrap Context’和‘Application Context’配置的分离。
+    - 要将Client模块下的application.yml文件改为bootstrap.yml，这是很关键的。
+    - 因为bootstrap.yml是比application.yml先加载的。bootstrap.yml优先级高于application.yml
+
+### RabbitMQ
+#### 概述
+#### 安装
+1. erlang安装参考（安装资源已上传百度云）
+    - [erlang安装](https://blog.csdn.net/llwy1428/article/details/99430328)
+2. RabbitMQ安装参考
+    - [参考](https://www.pianshen.com/article/77811336070/)
+3. 备注：此处依赖包未解决，外网速度太慢，暂时使用docker安装rabbitmq。
+    - [安装参考](https://blog.csdn.net/qq_34775355/article/details/108305396)
+
+### Docker
+#### 概述
+#### 安装
+1. [参考](https://blog.csdn.net/qq_26400011/article/details/113856681)
+    - 此处注意切换镜像，部分镜像可能不可用
+
+
+### Nginx
+#### 简介
+1. [简介](https://blog.csdn.net/weixin_42167759/article/details/85049546)
+2. [简介](https://www.cnblogs.com/knowledgesea/p/5175711.html)
+#### 安装
+#### 进阶
+
+### Bus消息总线
+#### 概述
+1. 是什么
+    - 在微服务架构的系统中，通常会使用轻量级的消息代理来构建一个共用的消息主题，并让系统中所有微服务实例都连接上来。由于该主题中产生的消息被所有实例监听和消费，所以称它为消息总线。在实例上的各个实例，都可以方便地广播一些需要让其他连接在该主题上的实例都知道的消息。
+    - 基本原理：ConfigClient实例都监听MQ中同一个topic（默认是springCloudBus）。当一个服务刷新数据时，它会把这个信息放入到Topic中，这样其他监听同一个Topic的服务就能得到通知，然后去更新自身的配置。
+2. 能干什么
+3. 为何被称为总线
+
+### 消息驱动
+#### 简介
+####
+
+### Sleuth
+#### 简介
+1. 在微服务框架中，一个客户端发起的请求在后端系统中会经过多个不同的服务节点调用来协同产生最后的请求结果，每一个前段请求都会形成一段复杂的分布式服务调用链路链路中任何一环出现高延时或错误都会引起整个请求最后的失败。
+
+## SpringCloud Aibaba（简介可以去官网看，中文的）
+### Nacos
+#### 简介
+
+
 
