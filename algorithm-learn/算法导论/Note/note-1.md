@@ -80,16 +80,16 @@ for j = 2 to A.length // j从2直到A的末尾
 FIND-MAX-CROSSING-SUBARRAY(A, low, mid, high)
     left-sum = -∞
     sum = 0
-    for i = mid downto low
+    for i = mid downto low // 向左延伸
         sum = sum + A[i]
-        if (sum > left-sum)
+        if (sum > left-sum) // 如果这个数加起来让值变大，则更新sum值，且更新最大子数组左边界
             left-sum = sum
             max-left = i
     right-sum = -∞
     sum = 0
     for j = mid + 1 to low
         sum = sum + A[j]
-        if (sum > right-sum)
+        if (sum > right-sum) // 同上
             right-sum = sum
             max-right = i
     return (max-left, max-right, left-sum + right-sum)
@@ -97,6 +97,7 @@ FIND-MAX-CROSSING-SUBARRAY(A, low, mid, high)
 
 // 有了找寻最大子数组的函数接下来开始递归确定mid,low,hight来找寻最大子数组
 FIND-MAXIMUM-SUBARRAY(A, low, mid)
+    // 此时是分解到还剩1个元素了
     if high == low
         return (low, high, A[low])
     else mid=⌊(low+high)/2⌋ // 向下取整
@@ -109,6 +110,7 @@ FIND-MAXIMUM-SUBARRAY(A, low, mid)
             FIND-MAXIMUM-SUBARRAY(A, mid + 1, high)
         (right-low,right-high,right-sum) = 
             FIND-MAX-CROSSING-SUBARRAY(A, low, mid, high)
+        // 返回当前最大值及其信息
         if(left-sum >= right-sum and left-sum >= cross-sum)
             return (left-low,left-high,left-sum)
         else if(right-sum >= left-sum and right-sum >= cross-sum)
@@ -119,3 +121,5 @@ FIND-MAXIMUM-SUBARRAY(A, low, mid)
 3. analysis
 4. x-code
 5. note
+
+### 4.2 矩阵乘法的Strassen算法
