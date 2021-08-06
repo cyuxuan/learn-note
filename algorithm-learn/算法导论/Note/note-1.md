@@ -23,7 +23,8 @@ for j = 2 to A.length // j从2直到A的末尾
     - 时间复杂度（忽略循环中常数部分）：
       - 最好情况：该数组已排序，每次只需要取出key，无需进行元素后移，该情况为O(n)
       - 最坏情况：该数组为逆置数组，取出key消耗n-1次，因为是逆置所以前面的数全部要后移，每次取数的key为数组中的j的位置的话-那么每次要前移j-1个数据，所以共有 1+2+3+···+n-1 次前移操作，所以该部分时间复杂度为O(n<sup>2</sup>)
-4. java-code(具体实现代码java-为使用语言)
+4. 
+java-code(具体实现代码java-为使用语言)
 ```
     public void insertion_sort(Integer[] a){
         for(int i = 1 ; i < a.length ; i++){
@@ -38,6 +39,23 @@ for j = 2 to A.length // j从2直到A的末尾
             a[position] = key;
         }
     }
+```
+c++ code(具体实现代码c++为使用语言)
+```
+void InsertionSort(int *a, int len)
+{
+	for (int j=1; j<len; j++)
+	{
+		int key = a[j];
+		int i = j-1;
+		while (i>=0 && a[i]>key)
+		{
+			a[i+1] = a[i];
+			i--;
+		}
+		a[i+1] = key;
+	}
+}
 ```
 5. note（该部分笔记）
 ### 2.2-分析算法
