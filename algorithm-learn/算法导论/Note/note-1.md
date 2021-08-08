@@ -32,40 +32,40 @@
 4. x-code
 java-code(具体实现代码java-为使用语言)
 
-```java
-    public void insertion_sort(Integer[] a){
-        for(int i = 1 ; i < a.length ; i++){
-            int key = a[i];
-            int position = i;
-            for (int j = i - 1 ; j >= 0 ; j-- ){
-                if(a[j] > key){
-                    a[j+1] = a[j];
-                    position -= 1;
+    ```java
+        public void insertion_sort(Integer[] a){
+            for(int i = 1 ; i < a.length ; i++){
+                int key = a[i];
+                int position = i;
+                for (int j = i - 1 ; j >= 0 ; j-- ){
+                    if(a[j] > key){
+                        a[j+1] = a[j];
+                        position -= 1;
+                    }
                 }
+                a[position] = key;
             }
-            a[position] = key;
         }
-    }
-```
+    ```
 
-c++ code(具体实现代码c++为使用语言)
+    c++ code(具体实现代码c++为使用语言)
 
-```cpp
-void InsertionSort(int *a, int len)
-{
-    for (int j=1; j<len; j++)
+    ```cpp
+    void InsertionSort(int *a, int len)
     {
-        int key = a[j];
-        int i = j-1;
-        while (i>=0 && a[i]>key)
+        for (int j=1; j<len; j++)
         {
-            a[i+1] = a[i];
-            i--;
+            int key = a[j];
+            int i = j-1;
+            while (i>=0 && a[i]>key)
+            {
+                a[i+1] = a[i];
+                i--;
+            }
+            a[i+1] = key;
         }
-    a[i+1] = key;
     }
-}
-```
+    ```
 
 5. note（该部分笔记）
 
