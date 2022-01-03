@@ -1,3 +1,4 @@
+## 注：vscode中查看，笔记中graph的查看需要使用到Markdown Preview Enhanced插件，否则无法正确显示图示
 ## Maven基础
 ### Maven是什么
 1. 解决点
