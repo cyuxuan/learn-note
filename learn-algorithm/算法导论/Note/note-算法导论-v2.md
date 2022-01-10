@@ -55,15 +55,20 @@ for j = 2 to A.length
 
 
 ``` 伪代码 MERGE(A,p,q,r)
+// 计算出第一个串的归并数量
 n1 = q - p + 1
+// 计算出第二个串的归并数量
 n2 = r - q
+// 重新赋值给新的数组-具体实现时操作下表即可
 let L[1...n1+1] and R[1...n2+1] be new arrays
 for i = 1 to n1
   L[i] = A[p + i - 1]
-for j = 1 to n
+for j = 1 to n2
   R[i] = A[q + j]
+// 末尾置为无穷大-方便对比  
 L[n1 + 1] = MAX
 R[n2 + 1] = MAX
+// 开始归并
 i = 1
 j = 1
 for k = p to r
@@ -72,5 +77,16 @@ for k = p to r
     i = i + 1
   else
     A[k] = R[j]
+```
+
+``` 伪代码 MERGE-SORT(A,p,r)
+if(p < r)
+  q = (p + r) / 2 [向下取整]
+  // 排序前一半
+  MERGE-SORT(A, p, q)
+  // 排序后一半
+  MERGE-SORT(A, q + 1, r)
+  // 排序全部
+  MERGE(A, p, q, r)
 ```
 
