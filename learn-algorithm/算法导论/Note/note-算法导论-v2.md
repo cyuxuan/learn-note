@@ -89,4 +89,65 @@ if(p < r)
   // 排序全部
   MERGE(A, p, q, r)
 ```
+#### 2.3.2 分治法分析
+
+## 第3章 函数的增长(！！！暂缺！！！)
+
+## 第4章 分治策略
+### 4.1 最大子数组问题
+- 例
+  - 设存在数组
+    - {110,113,110,85,,105,102,86,63,81,101,94,106,101,79,94,90,97}
+    - 其中n[x],n[y]均属于该数组，且y>x，求xy为何值时n[y] - n[x]取最大值
+  - 解法
+    1. 暴力求解
+    2. 递归(分治策略)
+    - 分治策略解法
+    - 该分治策略就是从每个位置开始找寻往左右两边进行探测，看能达到的最大数是多少。也是一种遍历。空间换了时间。
+```伪代码
+FIND-MAX-CROSSING-SUBArrAY(A, low, mid, high)
+  // 初始化左边数组和为最小值
+  left-sum = MIN
+  // 初始化sum，记录当前数组中的最大值
+  sum = 0
+  // 从mid位置开始向左边进行探测，获取当前最大和的数组边界
+  for i = mid downto low
+    sum = sum + A[i]
+    if(sum > left-sum) {
+      // 如果新的探测和大于原本的和，则更新和
+      left-sum = sum
+      // 且充值下表
+      max-left
+    } 
+  // 右边同理
+  right-sum = MIN
+  sum = 0
+  for j = mid + 1 to high
+    sum = sum + A[i]
+    if sum > right-sum
+      right-sum = sum
+      max-right = j
+return (max-left, max-right, left-sum + right-sum)
+```
+```伪代码
+FIND-MAX-SUBARRAY(A, low, high)
+  if high == low
+    return (low, high, A[low])
+  else mid = (low + high) / 2 (向下取整)
+    // 找左边最大子数组
+    (left-low, left-high, left-sum) = FIND-MAX-SUBARRAY(A, low, mid)
+    // 找右边最大子数组
+    (right-low, right-high, right-sum) = FIND-MAX-SUBARRAY(A, mid + 1, high)
+    // 找以某个位置为起点向左右两边探测出的最大子数组
+    (cross-low, cross-high, cross-sum) = FIND-MAX-CROSSING-SUBARRAY(A, low, mid, high)
+    // mid为起点向左边探测的和大于mid为起点向右边探测的和且大于mid为起点向左右探测的和
+    if(left-sum >= right-sum and left-sum >= cross-sum)
+      return (left-low, left-high, left-sum)
+    // mid为起点向右边探测的和大于mid为起点向左边探测的和且大于mid为起点向左右探测的和
+    elseif (right-sum >= left-sum and right-sum >= cross-sum)
+      return (right-low, right-high, right-sum)
+    // 否则为mid为起点向左右两边探测的值最大
+    else
+      return (cross-low, cross-hgih, cross-sum)
+```
 
