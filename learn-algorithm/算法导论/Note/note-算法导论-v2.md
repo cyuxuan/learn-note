@@ -151,3 +151,54 @@ FIND-MAX-SUBARRAY(A, low, high)
       return (cross-low, cross-hgih, cross-sum)
 ```
 
+###  矩阵乘法的Strassen算法（暂缺）-原理就是分块矩阵乘法
+
+
+## 第5章 概率分析和随机算法（暂缺）-概念之后再理解
+
+## 第6章 堆排序
+### 堆是什么
+  - 堆（二叉堆）是一个以数组形式存储的完全二叉树，分为大根堆和小根堆。
+  - 大根堆是指除了根以外的节点都满足：A[PARANT(i)] >= A[i] (即父节点的值大于等于其下子节点的值)。小根堆同理。
+  - 该数组有两个属性，heap-size(有效元素数量)，length(当前数组元素个数)。注意：只有heap-size指定的才是当前堆的元素数量。
+  - 一些必要的函数
+```伪代码
+// 获取当前元素的父元素
+PARANT(i)
+  return i/2 // 向下取整
+
+// 获取当前元素的左孩子
+LEFT(i)
+  return 2i
+
+// 获取当前元素的右孩子
+RIGHT(i)
+  return 2i + 1
+
+```
+
+### 维护堆的性质
+  - 当堆中某元素不满足堆的定义时，需要对其进行维护，使得当前堆重新满足堆的性质
+  - 使用其下函数
+```伪代码
+MAX-HEAPIFY(A,i) // i指当前的元素位置
+  l = LEFT(i)
+  r = RIGHT(i)
+  if l <= A.heap-size and A[l] > A[i] // 左孩子大于当前节点
+    largest = l
+  else largest = i
+  if r <= A.heap-size and A[r] > A[largest]
+    largest = r
+  if largest != i
+    exchange A[i] with A[largest]
+    MAX-HEAPIFY(A, largest)
+```
+
+### 建堆
+  - 自底向上不断使用堆的性质维护函数来维护当前数据满足堆，最终形成一个堆。
+```伪代码
+BUILD-MAX-HEAP(A)
+  A.heap-size = A.length
+  for i = A.length / 2(向下取整) downto 1 // 从排在最后的一个父元素开始进行堆性质的维护
+    MAX-HEAPIFY(A,i)
+```
