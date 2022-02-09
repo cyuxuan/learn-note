@@ -202,3 +202,61 @@ BUILD-MAX-HEAP(A)
   for i = A.length / 2(向下取整) downto 1 // 从排在最后的一个父元素开始进行堆性质的维护
     MAX-HEAPIFY(A,i)
 ```
+
+### 堆排序算法
+  - 不断维护堆的性质生成最大(最小)堆，每次生成后取出最大或者最小值，剩下部分再次生成最大或者最小堆，直到排序完成
+``` 伪代码
+HEAPSORT(A)
+  BUILD-MAX-HEAP(A)
+  for i = A.length downto 2
+    exchange A[1] with A[i]
+    A.heap-size = A.heap-size - 1
+    MAX-HEAPIFY(A, 1)
+```
+
+### 优先队列
+  - 优先队列是一种用来维护由一组元素构成的集合S的数据结构，其中的每一个元素都有一个相关的值，称为关键字。一个最大优先队列支持以下操作：
+    - INSERT(S, x): 把元素x插入集合S中。这一操作等价于 S=S并{x}
+    - MAXIMUM(S): 返回S中具有最大关键字的元素
+    - EXTRACT-MAX(S): 去掉并返回S中的具有最大关键字的元素
+    - INCREASE-KEY(S, x, k): 将元素x的关键字值增加到k，这里假设k的值不小于x的原关键字。
+  - 最大优先队列的应用举例
+    - 共享计算机系统的作业调度
+  - 关于实现
+    - HEAP-MAXIMUM可以再O(1)时间内实现MAXIMUM操作
+    - 过程 HEAP-EXTRACT-MAX 实现 EXTRACT-MAX 操作。它与 HEAPSORT 过程中的for循环体部分很相似
+    - 过程 HEAP-INCREASE-KEY 能够实现 INCREASE-KEY 操作在优先队列中，我们希望增加关键字的优先队列元素对应的数组下标i来标识。这一操作需要首先将元素A[i]的关键字更新为新值。增大A[i]的关键字可能会违反最大堆的性质。
+    - MAX-HEAP-INSERT 能够实现INSERT操作。它的输入是要被插入到最大堆A中的新元素的关键字。MAX-HEAP-INSERT首先通过增加一个关键字为负无穷的叶节点来扩展最大堆。然后调用 HEAP-INCREASE_KEY 为新结点设置对应的关键字，同时保持最大堆的性质
+```伪代码
+
+HEAP-MAXIMUM(A)
+  return A[1]
+
+
+HEAP-EXTRACT-MAX(A)
+  if A.heap-size < 1
+    error "heap underflow"
+  max = A[1]
+  A[1] = A[A.heap-size]
+  A.heap-size = A.heap-size - 1
+  MAX-HEAPIFY(A, 1)
+  return max
+
+HEAP-INCREASE-KEY(A, i, key)
+  if key < A[i]
+    error "new key is samller than current key"
+  A[i] = key
+  while i > 1 and A[PARENT(i)] < A[i]
+    exchange A[i] with A[PARENT(i)]
+    i = PARENT(i)
+
+
+MAX-HEAP-INSERT(A, key)
+  A.heap-size = A.heap-size + 1
+  A[A.heap-size] = 负无穷
+  HEAP-INCREASE-KEY(A, A.heap-size, key)
+
+```
+
+
+## 第7章 快速排序

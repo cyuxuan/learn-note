@@ -1,0 +1,27 @@
+# Spring基础
+## Spring总览
+- 特性总览
+- 版本特性
+- 技术整合
+  - Java语言特性运用
+  - JDK API实践
+  - Java EE API整合
+- 变成模型
+  - 面向对象编程
+    - 契约接口(接口)
+      - 这里就是面向接口编程
+  - 面向切面编程
+    - 动态代理
+      - 在Java中动态代理必须基于接口来进行编程，实际情况可能并不允许完全基于接口进行编程。因此Spring提升了一种方式。整合了第三方框架，例如ASM，CGLIB,AspectJ来帮助我们在类上做提升。帮助我们可以在某个类上面做一些AOP的拦截
+    - 字节码提升
+  - 面像元编程
+    - 配置元信息
+    - 注解
+    - 属性配置
+  - 面向模块编程
+    - Maven Artifacts
+    - Java9 Automatic Modules
+    - Spring @Enable* 注解
+  - 面向函数编程
+    - Lambda
+    - Reactive
