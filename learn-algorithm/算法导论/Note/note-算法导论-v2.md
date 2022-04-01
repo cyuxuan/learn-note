@@ -283,4 +283,210 @@ PARTITION(A, p, r)
   return i + 1
 ```
 
+## 第8章 线
+性时间排序
+### 8.2计数排序
+- 假设n个输入元素中的每一个都是在0到k区间内的一个整数，其中k为某个整数。当年k=O(n)时，排序的运行时间为O(n)
+- 基本思想
+  - 对于每一个输入元素x，确定小于x的元素个数。利用这一信息，就可以直接吧x放到它输出数组中的位置上了。当有几个元素相同时需要考虑重复问题。
+- 在技术排序算法的代码中，假设输入是一个数组A[1..n]，A,length = n。我们还需要两个数组：B[1..n]存放排序的输出，C[0..k]提供临时存储空间。
+```伪代码
+COUNTING-SORT(A, B, k)
+let C[0..k] be a new array
+for i = 0 to k
+  C[i] = 0
+for j = 1 to A.length
+  C[A[j]] = C[A[j]] + 1
+for i = 1 to k
+  C[i]=C[i]+C[i-1]
+for j = A.length downto 1
+  B[C[A[j]]] = A[j]
+  C[A[j]] = C[A[j]] - 1
+```
+
+### 8.3 基数排序
+- 了解概念即可
+
+### 8.4 桶排序
+- 桶排序假设输入数据服从均匀分布，平均情况下他们的时间代价为O(n)。与计数排序类似，因为对输入数据作了某种假设，桶排序的速度也很快。4
+- 桶的概念是，在均匀分布的数据中，不同样本就是在不同桶中，简单做法是数组中每个元素后接着一个链表，不同链表就是不同的桶，该排序就是将不同数据分区后再进行顺序排序。
+```伪代码
+BUCKET-SORT(A)
+  n = A.length
+  let B[0..n-1] be a new array
+  for i = 0 to n - 1
+    makeB[i] an empty list
+  for i = 1 to n
+    insert A[i] into list B[nA[i](nA[i]向下取整)]
+  for i = 0 to n - 1
+    sort list B[i] with insertion sort
+  concatenate the lists B[0],B[1],...,B[n-1] together in order
+```
+
+## 第9章 中位数和顺序统计量
+
+## 第10章 基本数据结构
+### 栈和队列
+### 链表
+### 有根树
+
+## 第11章 散列表
+### 11.1 直接寻址表
+- 当关键字无重复，且关键字集合中数量很小是可以使用直接寻址的方式。即散列方式就是关键字与内存一一对应。
+
+### 11.2 散列表
+- 当关键字集合很大，无法避免重复，则需要散列。
+### 11.3 散列函数(k是关键字，m是当前散列表的大小)
+- 除法散列法
+  - 通过取法区域，来进行散列
+- 乘法散列法
+  - h(k) = m(kA mod 1) 向下取整
+  - 这里 kA mod 1就是取小数部分
+  - 就是将大区间关键字的范围映射到小区间上
+- 全域散列法
+  - 全域散列详解(https://zhuanlan.zhihu.com/p/145176403)
+### 11.4 开放寻址法
+- 又称开放定址法，当哈希碰撞发生时，从发生碰撞的那个单元起，按照一定的次序，从哈希表中寻找一个空闲的单元，然后把发生冲突的元素存入到该单元。
+- 解决冲突的方法
+  - 线性探测
+    - 给定一个普通的散列函数h`:U->{0,1,2,...,m-1},称之为辅助散列函数，线性探查方法采用的散列函数为：
+      - h(k,i) = (h`(k) + i) mod m, i = 0,1,...,m-1
+    - 给定一个普通的散列函数，首先探查T[h\`(k)]，即由辅助散列函数所给出的槽位。再探查T[h`(k)+1]，依次类推直到循环整个序列。
+  - 二次探查
+    - h(k,i)=(h`(k) + c1_i + c2_i^2) mod m
+    - 其中h\`是一个辅助撒捏函数，c1和c2为正的辅助常数，i=0,1...,m-1。初始的探查位置为T[`(k)]，后续的探查位置要加上一个偏移量。
+  - 双重散列
+    - 双重散列是用于开放寻址法的最好方法之一，因为它所产生的牌系列具有速记选择排列的许多特性
+    - h(k,i) = (h1(k) + ih2(k) mod m)
+    - 初始探查位置为T[h1(k)]，后续的探查位置是前一个位置加上偏移量h2(k)模m。
+### 11.5 完全散列
+  - 采用两级单列方式，散列表和散列表后接的链表都采用散列。
 ## 第12章 二叉搜索树
+### 12.1 什么是二叉搜索树
+- 二叉搜索树由一颗二叉树来组织。可以使用链表的数据结构来表示，其中每个结点就是一个对象。除了key和卫星数据之外，每个结点还包含属性left，right和p,他们分别指向结点的左孩子，右孩子和双亲。如果某个孩子结点和父节点不存在，则相应属性的值为NULL。根节点是树中唯一父指针为NULL的结点。
+
+```中序遍历-伪代码
+INORDER-TREE-wALK(x)
+  if x != NULL
+    INORDER-TREE-wALK(x.left)
+    print x.key
+    INORDER-TREE-wALK(x.right)
+```
+
+### 12.2 查询二叉搜索树
+- 查找
+  - 输入一个指向树根的指针和一个关键字k，如果这个结点存在，TREE-SEARCH返回一个指向关键字为k的结点的指针；否则返回NULL。
+
+```二叉树查找-伪代码
+递归方式
+TREE-SEARCH(x, k)
+  if x== NULL or k == x.key
+    return x;
+  if k < x.key
+    return TREE-SEARCH(x.left, k)
+  else
+    return TREE-SEARCH(x.right, k)
+
+循环方式
+INERATIVE-TREE-SEARCH(x,k)
+  while x != NULL and k = x.key
+    if x < x.key
+      x = x.left
+    else
+      x = x.right
+  return x
+```
+- 最小关键字，最小关键字一定再左下角
+```最小关键字-伪代码
+TREE-MINMUN(x)
+  while x.left != NULL
+    x.left
+  return x
+```
+
+- 最大关键字，做大关键字一定再右下角
+```最大关键字-伪代码
+TREE-MAXIMUM(x)
+  while x.right != NULL
+    x = x.right
+  return x
+```
+
+- 后继与前驱
+  - 给定一颗二叉搜索树中的一个结点，有时候需要按中序遍历查它的后继。如果所有的关键字互不相同，则一个结点x的后继是大于x.key的最小关键字的结点。一颗二叉搜索树的结构允许我们通过没有任何关键字的比较来确定一个结点的后继。如果后继存在，下面的过程将返回一颗二叉搜索树中的结点x的后继；如果x是这棵树中的最大关键字，则返回NULL。
+```后继-伪代码
+TREE-SUCCESSOR(x)
+  if x.right != NULL
+    return TREE-MINIMUN(x.right)
+  y = x.p
+  while y != NULL and x == y.right
+    x = y
+    y = y.p
+  return y
+```
+
+- 插入和删除
+  - 这连个操作会引起二叉搜索数标识的动态集合的变化。一定要修改数据结构类反映这个变化，但修改要保持二叉搜索数性质的成立。
+  - 插入
+```插入-伪代码
+TREE-INSERT(T, z)
+  y = NULL
+  x = T.root
+  while x != NULL
+    y = x
+    if z.key < x.key
+      x = x.left
+    else
+      x = x.right
+  z.p = y
+  if y == NULL
+    T.root = z
+  else if z.key < y.key
+    y.left = z
+  else
+    y.right = z
+```
+
+- 删除
+  - 删除逻辑步骤
+  - 逻辑上概括出的三种情况
+    1. 如果z(待删除结点)没有孩子结点，那么只是简单地将它删除，并修改它的父结点，用NULL作为孩子结点来替换z
+    2. 如果z只有一个孩子，那么将这个孩子提升到树中z地位置上，并修改z地父结点，用z的孩子来替换z
+    3. 如果z有两个孩子，那么找z的后继y(一定在z的右子树中年)，并让y占据树中z的位置。z的原来右子树部分称为y的新的右子树，并且z的左子树成为y的新的左子树。
+  - 实际操作时执行的情况
+    1. 如果z没有左孩子，那么用其右孩子来替换z，这个右孩子可以是NULL，也可以不是。当z的右孩子是NULL时，此时这种情况归为z没有孩子结点的情形。当z的右孩子非NULL时，此时这种情况归为z没有孩子结点的情形。当z的右孩子非NULL时，这种情况就是z仅有一个孩子结点的情形，该孩子是其右孩子。
+    2. 如果z仅有一个孩子且为其左孩子，那么用其左孩子来替换。
+    3. 否则，z既有一个左孩子又有一个右孩子。我们要查找z的后继y，这个后继位于z的右子树中并且没有左孩子。现在需要将y移出原来的位置进行拼接，并接替树中的z。
+    5. 否则，y位于z的右子树中但并不是z的右孩子，这种情况下，先用y的右孩子替换y，然后再用y替换z。
+    - 原则就是要找到被删除结点的后继结点，来代替自己
+
+```删除-伪代码
+TRANSPLANT(T, u, v)
+  if u.p == NULL
+    T.root = v
+  else if
+    u.p.left = v
+  else
+    u.p.right = v
+  if v != NULL
+    v.p = u.p
+
+TREE-DELETE(T, z)
+  if z.left == NULL
+    TRANSPLANT(T, z, z.right)
+  else if
+    TRANSPLANT(T, z, z.left)
+  else
+    y = TREE-MINIMUM(z.right)
+    if y.p != z
+      TRANSPLANT(T, z, z.right)
+      y.right = z.right
+      y.right.p = y
+    TRANSPLANT(T, z, y)
+      y.left = z.left
+      y.left.p = y
+```
+
+## 第13章 红黑树
+
+
