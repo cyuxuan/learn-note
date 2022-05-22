@@ -1,3 +1,4 @@
+# 结合代码分支/learn-java-source/tree/master/c_code/code-1
 # Spring基础
 ## Spring总览
 - 特性总览
@@ -177,3 +178,12 @@
   - 强大的第三方整合
   - 易测试性
   - 更好的面向对象
+
+### 依赖来源
+
+
+### 配置元信息
+
+
+### IOC
+spring-context 类间关系[参考](https://blog.csdn.net/yj935094837/article/details/56014946?spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14-56014946-blog-101101133.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14-56014946-blog-101101133.pc_relevant_default&utm_relevant_index=19)
